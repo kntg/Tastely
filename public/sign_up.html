@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .container {
+                position: relative;
+            }
+
+            .center {
+                position: absolute;
+                top: 50%;
+                width: 100%;
+                text-align: center;
+                font-size: 18px;
+            }
+            .input-wrapper input {
+                background-color: #ffffff;
+                border: 3px solid black;
+                color: rgb(0, 0, 0);
+                text-align: left;
+                font-size: 16px;
+                margin: 4px 2px;
+                width: 250px;
+                border-radius: 20px;
+                box-sizing: border-box;
+            }
+            .input-wrapper {
+                position: relative;
+                display: inline-block;
+                bottom:50px;
+            }
+            .input-wrapper input[type="text"],
+            .input-wrapper input[type="password"] {
+                padding: 10px 40px 10px 15px;
+            }
+            .password-wrapper {
+                position: relative;
+                display: inline-block;
+            }
+            .password-wrapper input {
+                width: 250px;
+                padding: 10px 40px 10px 15px;
+            }
+            .ps {
+                background-image: url("../image/eye_close.png");
+                background-size: cover;
+                background-position: center;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+                height: 20px;
+                width: 25px;
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+            }
+            .button_d {
+                background-color: #ffffff;
+                border: 3px solid black;
+                color: rgb(0, 0, 0);
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 20px;
+            }
+            .button_c {
+                background-color: rgb(128, 0, 255);
+                border: 3px solid black;
+                color: rgb(255, 255, 255);
+                padding: 10px 32px;
+                text-align: center;
+                text-decoration: none;
+                font-family: 'Times New Roman', Times, serif;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 20px;
+                /* position:absolute; */
+                /* left: 138px; */
+            }
+            .h {
+                line-height: 7;
+            }
+            .title {
+                font-family: "Times New Roman", Times, serif;
+                font-size: 50px;
+                line-height: 0%;
+                color: aliceblue;
+            }
+            body {
+                height: 100%;
+                margin: 0;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-image: linear-gradient(rgb(98, 0, 255), rgb(0, 0, 0));
+            }
+            .text1 {
+                color: aliceblue;
+            }
+            .bottomright {
+                position: absolute;
+                bottom: 8px;
+                right: 16px;
+                font-size: 18px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="center">
+                <p class="title">Tastly</p>
+                <div class="h"><br></div>
+                <div class="input-wrapper">
+                    <label class="text1">Sign Up</label><br>
+                    <input type="text" placeholder="email"><br>
+                    <input type="text" placeholder="username"><br>
+                    <div class="password-wrapper">
+                        <input id="password" type="password" placeholder="password">
+                        <button type="button" class="ps" id="toggleBtn" onclick="togglePassword()"></button><br>
+                    </div><br>
+                    <div class="password-wrapper">
+                        <input id="passwords" type="password" placeholder="confirm password">
+                        <button type="button" class="ps" id="toggleBtns" onclick="togglePasswords()"></button><br>
+                    </div>
+                    <br><a href="index.html" class="button_c">Login?</a><a href="home.html" class="button_c">Sign Up</a>
+                </div>
+                
+            </div>
+        </div>
+
+        <script>
+            function togglePassword() {
+                const passwordInput = document.getElementById("password");
+                const toggleBtn = document.getElementById("toggleBtn");
+        
+                const isPassword = passwordInput.type === "password";
+                passwordInput.type = isPassword ? "text" : "password";
+        
+                toggleBtn.style.backgroundImage = isPassword
+                    ? 'url("../image/eye.png")'
+                    : 'url("../image/eye_close.png")';
+            }
+
+            function togglePasswords() {
+                const passwordInput = document.getElementById("passwords");
+                const toggleBtn = document.getElementById("toggleBtns");
+        
+                const isPassword = passwordInput.type === "password";
+                passwordInput.type = isPassword ? "text" : "password";
+        
+                toggleBtn.style.backgroundImage = isPassword
+                    ? 'url("../image/eye.png")'
+                    : 'url("../image/eye_close.png")';
+            }
+        </script>
+    </body>
+</html>

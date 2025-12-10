@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body, html {
+            height: 100%;
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #000000;
+          }
+
+          .layout {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            grid-template-rows: 80px 1fr;
+            height: 100vh;
+          }
+
+          .sidebar {
+            grid-column: 1 / 2;
+            grid-row: 1 / 3;
+            background-color: rgb(59, 37, 199);
+            color: lightgray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+          }
+
+          .header {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+            background-color: black;
+            color: rgb(255, 255, 255);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            border-radius: 20px;
+          }
+
+          .content {
+            grid-column: 2 / 3;
+            grid-row: 2 / 3;
+            background-image: linear-gradient(rgb(98, 0, 255), rgb(0, 0, 0));
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            border-radius: 20px;
+            margin: 4px;
+            flex-direction: column;
+            max-height: 90%;
+            overflow: hidden;
+          }
+
+          .chat {
+            background-color: #ffffff;
+            border: 3px solid black;
+            color: rgb(0, 0, 0);
+            text-align: left ;
+            font-size: 16px;
+            margin: 4px 2px;
+            padding-left: 30px;
+            padding-right: 30px;
+            height: 50px;
+            width: 65%;
+            border-radius: 20px;
+            box-sizing: border-box;
+          }
+
+          .button_d{
+            background-color: #ffffff;
+            border: 3px solid black;
+            color: rgb(0, 0, 0);
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 20px;
+          }
+          .bottomright {
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+            font-size: 18px;
+          }
+
+          .chat-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0);
+            flex-direction: column;
+            height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            display: none;
+          }
+
+          .messages {
+            padding: 1rem;
+            flex-grow: 1;
+            overflow-y: auto;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border-radius: 15px;
+          }
+
+          .messages::-webkit-scrollbar{
+            display: none;
+          }
+
+          .message {
+            resize: none;
+            border: none;
+            outline: none;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            max-width: 45%;
+            line-height: 1.5;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+          }
+
+          .message.user {
+            background-color: #2f00ff;
+            color:white;
+            font-size: 15px;
+            align-self: flex-end;
+            box-shadow: 5px 5px 5px #00000077;
+          }
+
+          .message.bot {
+            background-color: rgb(0, 0, 0);
+            color:white;
+            font-size: 15px;
+            align-self: flex-start;
+            box-shadow: 5px 5px 5px #00000077;
+            font-weight: bold;
+          }
+
+          .input-area {
+            display: flex;
+            padding: 1rem;
+          }
+
+          .chat1{
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #000000;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+          }
+
+          .input-area button {
+            margin-left: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: rgb(86, 37, 199);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+          }
+
+          .input-area button:hover {
+            background-color: rgb(59, 37, 199);
+          }
+
+          .circle {
+            border-radius: 100%;
+            width: 50px;
+            height: 50px;
+            margin-top: 5%;
+            margin-left: 70%;
+            position: absolute;
+            cursor: pointer;
+            background: url("../image/default_user.png") center/cover no-repeat;
+          }
+
+          .titel {
+            max-height: 20%;
+            height: 50%;
+            color: white;
+          }
+          
+          textarea {
+            resize: none;
+            overflow: hidden;
+            line-height: 1.5;
+            min-height: 50px;
+            max-height: 200px;
+            align-content: center;
+            padding: 10px;
+          }
+
+          .desc-toggle {
+            background-color: transparent;
+            color: rgb(128, 0, 255);
+            border: none;
+            cursor: pointer;
+            margin: 0%;
+            display: inline-flex;
+          }
+
+          .description {
+            display: none;
+            background-color: #222;
+            color: white;
+            font-weight: normal;
+            text-align: justify;
+            padding: 2%;
+            margin-top: 5%;
+          }
+
+          .profile{
+            background: #22222200;
+            border-radius: 10%;
+            width: 250px;
+            height: 165px;
+            position: absolute;
+            left: 78%;
+            top: 1%;
+          }
+
+          .preferencep{
+            background: #222222;
+            border-radius: 10%;
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            left: 73%;
+            top: 1%;
+            display: none;
+          }
+
+          .uprofile{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 8%;
+            margin-top: 10%;
+            display:none;
+          }
+
+          .upreference{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 8%;
+            margin-top: 10%;
+          }
+
+          .test1{
+            background: white;
+            height: 15px;
+            width: 15px;
+            display: inline-flex;
+          }
+
+          .exitp{
+            color: white;
+            background: transparent;
+            font-weight: bolder;
+            height: 20px;
+            width: 20px;
+            right: 20px;
+            position: absolute;
+            border: none;
+            cursor: pointer;
+          }
+
+          .pprofile{
+            background: url("../image/profile.png") center/cover no-repeat;
+            height: 15px;
+            width: 15px;
+            display: inline-flex;
+          }
+
+          .ppreference{
+            background: url("../image/preference.png") center/cover no-repeat;
+            height: 15px;
+            width: 15px;
+            display: inline-flex;
+          }
+
+          .psignout{
+            background: url("../image/sign_out.png") center/cover no-repeat;
+            height: 13px;
+            width: 13px;
+            display: inline-flex;
+          }
+
+          .link{
+            background: transparent; 
+          }
+
+          .link.su{
+            position: absolute;
+            right: 17px;
+            top: 120px;
+            height: 20px;
+            width: 90px;
+          }
+
+          .link.pro{
+            position: absolute;
+            right: 147px;
+            top: 68px;
+            height: 25px;
+            width: 90px;
+          }
+
+          .link.pre{
+            position: absolute;
+            right: 117px;
+            top: 97px;
+            height: 25px;
+            width: 120px;
+            cursor: pointer;
+            border: none;
+          }
+
+          .choice{
+            font-size: medium;
+            font-weight: normal;
+          }
+
+        </style>
+    </head>
+    <body>
+        <div class="layout">
+            <div class="sidebar"></div>
+
+            <div class="header">Tastly
+              <div class="profile">
+                <button class="circle" onclick="hideprofile()"></button>
+                <div class="uprofile">Username<br><br>
+                  <a href="" class="link pro"></a>
+                  <button onclick="preferencepage()" class="link pre"></button>
+                  <div style="font-weight: normal;">
+                    <div class="pprofile" ></div>
+                    <span style="font-size: large;">Profile</span><br>
+                    <div class="ppreference"></div>
+                    <span style="font-size: large;">Preference</span><br>
+                  </div>
+                  <a href="index.html" class="link su"></a>
+                  <div style="text-align: right; font-weight: normal;">
+                    <div class="psignout"></div>
+                    <span style="font-size: large;">sign out</span>
+                  </div>
+                </div>
+              </div>
+              <div class="preferencep">
+                <div class="upreference">Prefered Cuisines 
+                  <button onclick="hpreference()" class="exitp">X</button>
+                  <br><input name="food3" type="checkbox" value="American"><label class="choice" style="padding-right: 32px;"> American</label>
+                  <input name="food3" type="checkbox" value="Chinese"><label class="choice"> Chinese</label>
+                  <br><input name="food3" type="checkbox" value="India"><label class="choice" style="padding-right: 64px;"> India</label>
+                  <input name="food3" type="checkbox" value="Indonesian" checked><label class="choice"> Indonesian</label>
+                  <br><input name="food3" type="checkbox" value="Italian"><label class="choice" style="padding-right: 56px;"> Italian</label>
+                  <input name="food3" type="checkbox" value="Japanese"><label class="choice"> Japanese</label>
+                  <br><input name="food3" type="checkbox" value="Korean"><label class="choice" style="padding-right: 47px;"> Korean</label>
+                  <input name="food3" type="checkbox" value="Middle Eastern"><label class="choice"> Middle Eastern</label>
+                  <br><input name="food3" type="checkbox" value="Singaporean"><label class="choice" style="padding-right: 8px;"> Singaporean</label>
+                  <input name="food3" type="checkbox" value="Thailand"><label class="choice"> Thailand</label>
+                  <br><br>Extra
+                  <br><input name="food1" type="radio" name="food1" value="Heavy"><label class="choice" style="padding-right: 21px;"> Heavy</label>
+                  <input type="radio" name="food1" value="Snacks"><label class="choice" style="padding-right: 20px;"> Snacks</label>
+                  <input type="radio" name="food1" value=null checked><label class="choice"> None</label>
+                  <br><input type="radio" name="food2" value="Junkfood"><label class="choice" style="padding-right: 1px;"> Junkfood</label>
+                  <input type="radio" name="food2" value="Healthy"><label class="choice" style="padding-right: 20px;"> Healthy</label>
+                  <input type="radio" name="food2" value=null checked><label class="choice"> None</label>
+                  <br><input type="radio" name="food3" value="Halal"><label class="choice" style="padding-right: 30px;"> Halal</label>
+                  <input type="radio" name="food3" value="Non-Halal"><label class="choice" style="padding-right: 3px;"> Non-Halal</label>
+                  <input type="radio" name="food3" value=null checked><label class="choice"> None</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="content">
+              <div class="titel">What's your mood today?</div>
+              <textarea type="text" class="chat" id="userfinput" placeholder="Type your mood..." rows="1"></textarea><br>
+                <div class="chat-container">
+                  <div class="messages" id="chat"></div>
+                  <div class="input-area">
+                    <textarea type="text" id="userInput" class="chat1" placeholder="Type your mood..." rows="1"></textarea>
+                    <button onclick="sendMessage()">Send</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    
+        <script>
+          const chat = document.getElementById("chat");
+          const input = document.getElementById("userInput");
+          const finput = document.getElementById("userfinput");
+          const ccontainer = document.getElementsByClassName("chat-container")[0];
+          const dinput = document.getElementsByClassName("chat1")[0];
+          const cinput = document.getElementsByClassName("chat")[0];
+          const title = document.getElementsByClassName("titel")[0];
+          const berak = document.getElementsByClassName("break")[0];
+          const innerprofile = document.getElementsByClassName("uprofile")[0];
+          const outerprofile = document.getElementsByClassName("profile")[0];
+          const preferencep = document.getElementsByClassName("preferencep")[0];
+          const userprofile = document.getElementsByClassName("circle")[0];
+          const fimg = document.getElementsByClassName("test1")[0];
+
+          function appendMessage(text, sender, desc = null) {
+            const msg = document.createElement("div");
+            msg.className = "message " + sender;
+
+            if (sender === "bot" && desc) {
+              msg.innerHTML = `<div><span class="test1"></span><span>${text}   </span><button class="desc-toggle" onclick="showdesc(this)">Show Description</button><span class="description">${desc}</div>`;
+            } else {
+              msg.innerText = text;
+            }
+
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+          }
+          
+          async function preferencepage() {
+            hideprofile();
+            userprofile.style.display="none";
+            preferencep.style.display="inherit";
+          }
+
+          function hpreference(){
+            userprofile.style.display="inherit";
+            preferencep.style.display="none";
+          }
+
+          function combine(){
+            const values = [];
+
+            ["food1", "food2"].forEach(name => {
+              const selected = document.querySelector(`input[name="${name}"]:checked`);
+              if (selected && selected.value && selected.value !== "null") {
+                values.push(selected.value);
+              }
+            });
+
+            const checkboxes = document.querySelectorAll('input[name="food3"]:checked');
+            checkboxes.forEach(cb => {
+              if (cb.value && cb.value !== "null") {
+                values.push(cb.value);
+              }
+            });
+
+            return values.join(",");
+          }
+
+          async function sendMessage(text = null) {
+            text = text?.trim() ?? input.value.trim();
+            if (!text) return;
+        
+            appendMessage(text, "user");
+        
+            if (finput.value.trim() === text) {
+              finput.value = "";
+              autoResize(finput);
+            } else {
+              input.value = "";
+              autoResize(input);
+            }
+            
+            const rtext = text;
+            const preference = combine();
+            const rprompt = `prompt:${rtext};preference:${preference}; determine the prompt text feeling; based on prompt feeling and preference give answer as example; answer template:{"food":"food_actual_name", "desc":"food_desc", "img":"food_img"}; for img use image address from top image search based on food; answer must be in json format and dont add extra word just follow the example; answer only in english`;
+
+            try {
+              const res = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: rprompt })
+              });
+              const data = await res.json();
+
+              const rawString = data.result;
+              const start = rawString.indexOf('{');
+              const end = rawString.lastIndexOf('}');
+              const jsonString = rawString.substring(start, end + 1);
+              const jsonObj = JSON.parse(jsonString);
+              
+              fimg.style.background=`url("${jsonObj.img}")`;
+
+              appendMessage(jsonObj.food || "No response 🤖", "bot", jsonObj.desc || "NULL");
+            } catch (err) {
+              console.error(err);
+              appendMessage("⚠️ Error contacting AI", "bot", `${rawString}`);
+            }
+          }
+        
+          input.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              sendMessage();
+              dinput.style.height = "50px";
+              e.preventDefault();
+            }
+          });
+        
+          finput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              sendMessage(finput.value);
+              cinput.style.display = "none";
+              ccontainer.style.display = "flex";
+              title.style.display = "none";
+              berak.style.display = "none";
+            }
+          });
+
+          const autoResize = (el) => {
+            el.style.height = "50px";
+            el.style.height = (el.scrollHeight) + "px";
+          };
+
+          function showdesc(button) {
+            const messageDiv = button.closest(".message");
+            const descDiv = messageDiv.querySelector(".description");
+            if (descDiv) {
+              descDiv.style.display = descDiv.style.display === "flex" ? "none" : "flex";
+            }
+          }
+
+          function hideprofile(){
+              if (innerprofile.style.display == "inherit"){
+                innerprofile.style.display = "none";
+              }
+              else innerprofile.style.display = "inherit";
+
+              if(outerprofile.style.background == "rgb(34, 34, 34)"){
+                outerprofile.style.background = "#22222200";
+              }
+              else outerprofile.style.background = "#222222";
+          }
+
+          input.addEventListener("input", () => autoResize(input));
+          finput.addEventListener("input", () => autoResize(finput));
+
+        </script>        
+    </body>
+</html>
