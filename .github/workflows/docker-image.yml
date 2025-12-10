@@ -1,10 +1,9 @@
-name: Docker Image CI
+name: build
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,10 +11,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Check files
+
+      - name: List files to verify Dockerfile exists
         run: ls -R .
 
-      - name: Build Docker Image
+      - name: Build Docker image
+        working-directory: ./   # atau ./Tastely jika folder nested
         run: docker build -t my-image-name:$(date +%s) .
-        working-directory: ../
